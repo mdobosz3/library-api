@@ -1,0 +1,9 @@
+<p>Hello <%= @reader.full_name %>,</p>
+<p>
+  <% if @reminder_type == :upcoming %>
+    This is a reminder that your borrowed book <strong><%= @book.title %></strong> is due in 3 days.
+  <% else %>
+    Today is the due date for your borrowed book <strong><%= @book.title %></strong>.
+  <% end %>
+</p>
+<p>Best regards,<br>Library System</p>

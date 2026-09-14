@@ -1,0 +1,4 @@
+development
+  borrowing_reminders:
+    class: "BorrowingReminderJob"
+    schedule: "0 8 * * *"
