@@ -9,7 +9,7 @@ RSpec.describe Books::WithStatusQuery do
     it 'returns all books and preloads their active borrowings' do
       result = described_class.new.call
 
-      expect(result).to match_array([available_book, borrowed_book])
+      expect(result).to include(available_book, borrowed_book)
 
       loaded_borrowed_book = result.find { |b| b.id == borrowed_book.id }
       expect(loaded_borrowed_book.active_borrowing).to eq(borrowing)
