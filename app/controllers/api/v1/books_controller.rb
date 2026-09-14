@@ -14,6 +14,26 @@ module Api
         ), status: :ok
       end
 
+      def show
+        book = Book.includes(borrowings: :reader).find(params[:id])
+
+        render json: book.as_json(
+          only: [:id, :serial_number, :title, :author, :created_at, :updated_at],
+          include: {
+            borrowings: {
+              only: [:id, :borrow_date, :return_date],
+              include: {
+                reader: {
+                  only: [:id, :card_number, :full_name, :email]
+                }
+              }
+            }
+          }
+        ), status: :ok
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'Book not found' }, status: :not_found
+      end
+
       def create
         json_params = begin
           request.body.rewind

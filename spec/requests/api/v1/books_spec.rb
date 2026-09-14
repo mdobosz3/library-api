@@ -16,23 +16,6 @@ RSpec.describe 'Api::V1::Books', type: :request do
     end
   end
 
-#   describe 'POST /api/v1/books' do
-#     let(:valid_attributes) { { book: { title: 'Dune', author: 'Frank Herbert' } } }
-
-#     it 'creates a new Book and returns status created' do
-#       binding.pry
-#       expect {
-#         post '/api/v1/books', params: valid_attributes.to_json, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
-#       }.to change(Book, :count).by(1)
-# puts "TEST STATUS: #{response.status}"
-#       puts "TEST BODY: #{response.body}"
-#       expect(response).to have_http_status(:created)
-      
-#       # json_response = JSON.parse(response.body)
-#       # expect(json_response['title']).to eq('Dune')
-#       # expect(json_response['serial_number'].length).to eq(6)
-#     end
-#   end
 describe 'POST /api/v1/books' do
   let(:valid_attributes) { { book: { title: 'Dune', author: 'Frank Herbert' } } }
 
@@ -46,6 +29,35 @@ describe 'POST /api/v1/books' do
     json_response = JSON.parse(response.body)
     expect(json_response['title']).to eq('Dune')
     expect(json_response['serial_number'].length).to eq(6)
+  end
+end
+
+describe 'GET /api/v1/books/:id' do
+  let(:book) { create(:book) }
+  let(:reader) { create(:reader) }
+  let!(:borrowing) { create(:borrowing, book: book, reader: reader, borrow_date: 10.days.ago, return_date: 5.days.ago) }
+
+  it 'returns book details with borrowings history' do
+    get api_v1_book_path(book), headers: { 'Accept' => 'application/json' }
+
+    expect(response).to have_http_status(:ok)
+    json = JSON.parse(response.body)
+
+    expect(json['id']).to eq(book.id)
+    expect(json['title']).to eq(book.title)
+    expect(json['serial_number']).to eq(book.serial_number)
+    
+    expect(json['borrowings'].length).to eq(1)
+    expect(json['borrowings'].first['id']).to eq(borrowing.id)
+    expect(json['borrowings'].first['reader']['full_name']).to eq(reader.full_name)
+  end
+
+  it 'returns not found error when book does not exist' do
+    get '/api/v1/books/999999', headers: { 'Accept' => 'application/json' }
+
+    expect(response).to have_http_status(:not_found)
+    json = JSON.parse(response.body)
+    expect(json['error']).to eq('Book not found')
   end
 end
 end
