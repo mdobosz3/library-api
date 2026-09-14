@@ -6,10 +6,12 @@ RSpec.describe 'Api::V1::Borrowings', type: :request do
 
   describe 'POST /api/v1/borrowings/checkout' do
     context 'with valid parameters' do
+      let(:valid_params) { { book_id: book.id, reader_id: reader.id } }
+
       it 'successfully checks out the book' do
         post checkout_api_v1_borrowings_path,
-             params: { book_id: book.id, reader_id: reader.id },
-             as: :json
+             params: valid_params.to_json,
+             headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
 
         expect(response).to have_http_status(:created)
         json = JSON.parse(response.body)
@@ -24,8 +26,8 @@ RSpec.describe 'Api::V1::Borrowings', type: :request do
 
       it 'returns an unprocessable entity status' do
         post checkout_api_v1_borrowings_path,
-             params: { book_id: book.id, reader_id: reader.id },
-             as: :json
+             params: { book_id: book.id, reader_id: reader.id }.to_json,
+             headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
 
         expect(response).to have_http_status(:unprocessable_content)
         json = JSON.parse(response.body)
@@ -40,8 +42,8 @@ RSpec.describe 'Api::V1::Borrowings', type: :request do
 
       it 'successfully returns the book' do
         patch return_api_v1_borrowings_path,
-              params: { book_id: book.id },
-              as: :json
+              params: { book_id: book.id }.to_json,
+              headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
 
         expect(response).to have_http_status(:ok)
         json = JSON.parse(response.body)
@@ -52,8 +54,8 @@ RSpec.describe 'Api::V1::Borrowings', type: :request do
     context 'when the book is not currently borrowed' do
       it 'returns an unprocessable entity status' do
         patch return_api_v1_borrowings_path,
-              params: { book_id: book.id },
-              as: :json
+              params: { book_id: book.id }.to_json,
+              headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
 
         expect(response).to have_http_status(:unprocessable_content)
         json = JSON.parse(response.body)

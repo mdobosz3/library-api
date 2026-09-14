@@ -35,6 +35,7 @@ module Api
       end
 
       def create
+        
         json_params = begin
           request.body.rewind
           JSON.parse(request.body.read)
@@ -49,7 +50,7 @@ module Api
         if result[:success]
           render json: result[:book], status: :created
         else
-          render json: { errors: result[:errors] }, status: :unprocessable_entity
+          render json: { errors: result[:errors] }, status: :unprocessable_content
         end
       end
 
@@ -59,7 +60,7 @@ module Api
         if result[:success]
           head :no_content
         else
-          render json: { errors: result[:errors] }, status: :unprocessable_entity
+          render json: { errors: result[:errors] }, status: :unprocessable_content
         end
       end
 

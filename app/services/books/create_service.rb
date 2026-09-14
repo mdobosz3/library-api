@@ -1,18 +1,3 @@
-# module Books
-#   class CreateService
-#     def call(params)
-#       serial_number = SecureRandom.alphanumeric(6).upcase
-#       book = Book.new(params.merge(serial_number: serial_number))
-
-#       if book.save
-#         { success: true, book: book }
-#       else
-#         { success: false, errors: book.errors.full_messages }
-#       end
-#     end
-#   end
-# end
-
 module Books
   class CreateService
     def call(params)
