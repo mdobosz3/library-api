@@ -6,7 +6,7 @@ RSpec.describe Books::CreateService do
 
     it 'creates a new book with a generated 6-digit serial number' do
       result = nil
-      
+
       expect {
         result = described_class.new.call(valid_params)
       }.to change(Book, :count).by(1)
@@ -18,7 +18,7 @@ RSpec.describe Books::CreateService do
 
     it 'returns errors when params are invalid' do
       result = nil
-      
+
       expect {
         result = described_class.new.call({ title: '' })
       }.not_to change(Book, :count)

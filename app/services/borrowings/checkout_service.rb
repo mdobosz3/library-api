@@ -18,7 +18,7 @@ module Borrowings
         end
       end
     rescue ActiveRecord::RecordNotFound => e
-      { success: false, errors: [e.message] }
+      { success: false, errors: [ e.message ] }
     end
   end
 end

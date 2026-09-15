@@ -19,7 +19,7 @@ RSpec.describe Borrowings::CheckoutService do
       create(:borrowing, book: book, reader: reader)
 
       result = described_class.new.call(book_id: book.id, reader_id: reader.id)
-      
+
       expect(result[:success]).to be false
       expect(result[:errors]).to include('Book is already borrowed')
     end

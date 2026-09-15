@@ -18,7 +18,7 @@ module Books
       next_value = ActiveRecord::Base.connection.select_value(
         "SELECT nextval('book_serial_seq')"
       )
-      next_value.to_s.rjust(6, '0')
+      next_value.to_s.rjust(6, "0")
     end
   end
 end

@@ -9,9 +9,9 @@ class BorrowingMailer < ApplicationMailer
 
     subject = if @reminder_type == :upcoming
                 "Reminder: Return book '#{@book.title}' in 3 days"
-              else
+    else
                 "Urgent: Today is the due date for book '#{@book.title}'"
-              end
+    end
 
     Rails.logger.info "--- SENDING EMAIL TO: #{@reader.email} | SUBJECT: #{subject} ---"
     mail(to: @reader.email, subject: subject)
